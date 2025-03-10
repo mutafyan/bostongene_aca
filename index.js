@@ -1,3 +1,3 @@
-import { run } from './assignments/conditional_branching/exercise3.js';
+import { run } from './assignments/conditional_branching/exercise12.js';
 
 run();
