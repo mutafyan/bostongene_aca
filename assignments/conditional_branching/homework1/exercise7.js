@@ -4,7 +4,7 @@
  * otherwise print "Invalid name".
  */
 
-import { takeUserInput, closeInput } from "../helpers.js";
+import { takeUserInput, closeInput } from "../../helpers.js";
 
 const checkNameLength = (name) => {
     const MIN_NAME_LENGTH = 4;

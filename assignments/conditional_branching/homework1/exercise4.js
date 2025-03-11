@@ -1,7 +1,7 @@
 /**Task
  * Check whether a given number is negative. Print “yes”, if it is negative, print “no” otherwise.
  */
-import { takeUserInput, closeInput, validateNumber } from "../helpers.js";
+import { closeInput, takeInputNumber } from "../../helpers.js";
 
 
 // returns a boolean value
@@ -10,14 +10,14 @@ const isNegative = (num) => {
 }
 
 const takeInput = async () => {
-    // convert string input to number
-    let num = +await takeUserInput("Input a number to check if it is negative: ");
+    // get a number input // returns null if not a valid number is entered
+    let num = await takeInputNumber("Enter a number to check if it is negative: ");
     closeInput();
     // return the number if valid
-    if(validateNumber(num)) {
+    if(num) {
         return num;
     } else {
-        console.log("Not a valid number")
+        console.log("Invalid input. Exiting...")
         return null;
     }
 }

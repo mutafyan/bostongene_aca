@@ -3,7 +3,7 @@
  * in the alphabet or not. 
  */
 
-import { takeUserInput, closeInput } from "../helpers.js";
+import { takeUserInput, closeInput } from "../../helpers.js";
 
 /** 
  * in ASCII Table, each character has its own ASCII code

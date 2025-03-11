@@ -4,22 +4,23 @@
  * otherwise print “Out of bounds”.
  */
 
-import { takeUserInput, closeInput, validateNumber } from "../helpers.js";
+import { closeInput, takeInputNumber } from "../../helpers.js";
 
 const isInBounds = (lower, upper, num) => {
     return num >= lower && num <= upper;
 }
 
 const takeInput = async () => {
-    let lower = +await takeUserInput("Input the lower bound of the range: ");
-    let upper = +await takeUserInput("Input the upper bound of the range: ");
-    let num = +await takeUserInput("Input a number to check if it is in bounds: ");
+    let lower = await takeInputNumber("Input the lower bound of the range: ");
+    let upper = await takeInputNumber("Input the upper bound of the range: ");
+    let num = await takeInputNumber("Input a number to check if it is in bounds: ");
+
     closeInput();
 
-    if(validateNumber(lower) && validateNumber(upper) && validateNumber(num)) {
+    if(lower && upper && num) {
         return { lower, upper, num };
     } else {
-        console.log("Not a valid number")
+        console.log("Invalid input. Exiting...");
         return null;
     }
 }

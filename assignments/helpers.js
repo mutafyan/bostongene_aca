@@ -27,21 +27,33 @@ export const closeInput = () => {
 
 // close readline manually when using
 export const takeInputNumber = async (message) => {
-  const n = +await takeUserInput(message);
-  if(validateNumber(n)) {
-      return n;
+  const input = await takeUserInput(message);
+  if(!input) return null;
+  const number = Number(input);
+  if(validateNumber(number)) {
+      return number;
   } else{
       console.log('Please enter a valid number');
       return null;
   }
 }
 
-export const takeInputNaturalNumber = async (message) => {
-  const n = +await takeUserInput(message);
-  if(validateNumber(n) && Number.isInteger(n) && n > 0) { // validate natural number
-      return n;
+export const takeInputInteger = async (message) => {
+  const integer = await takeInputNumber(message);
+  if(validateInteger(integer)) { // validate integer
+      return integer;
   } else{
-      console.log('Please enter a valid number');
+      console.log('Please enter a valid integer');
+      return null;
+  }
+}
+
+export const takeInputNaturalNumber = async (message) => {
+  const naturalNumber = await takeInputNumber(message);
+  if(validateInteger(naturalNumber) && naturalNumber > 0) { // validate natural number
+      return naturalNumber;
+  } else{
+      console.log('Please enter a valid natural number');
       return null;
   }
 }
@@ -49,6 +61,14 @@ export const takeInputNaturalNumber = async (message) => {
 
 export function validateNumber(num) {
     if(typeof num === "number" && !isNaN(num)){
+        return true;
+    } else {
+        return false;
+    }
+}
+
+export function validateInteger(num) {
+    if(validateNumber(num) && Number.isInteger(num)) {
         return true;
     } else {
         return false;

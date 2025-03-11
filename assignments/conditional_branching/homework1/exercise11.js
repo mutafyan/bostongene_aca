@@ -2,19 +2,20 @@
  * Given a number, determine if it's a perfect square (i.e., the square of an integer).
  * Print "Perfect square" if it is, and "Not a perfect square" otherwise. 
  */
-import { validateNumber, takeUserInput, closeInput } from "../helpers.js";
+import { closeInput, takeInputNumber } from "../../helpers.js";
 
+// if it is a perfect square, the square root will be an integer
 const isPerfectSquare = (num) => {
-    return Number.isInteger(Math.sqrt(num));
+    return Number.isInteger(Math.sqrt(num)); 
 }
 
 const takeInput = async () => {
-    let num = +await takeUserInput("Input a number to check if it is a perfect square: ");
+    let num = await takeInputNumber("Input a number to check if it is a perfect square: ");
     closeInput();
-    if(validateNumber(num)) {
+    if(num && num >= 0) {
         return num;
     } else {
-        console.log("Not a valid number")
+        console.log("Invalid input. Exiting...");
         return null;
     }
 }

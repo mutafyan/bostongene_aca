@@ -4,13 +4,13 @@
  * a four-digit number. 
  */
 
-import { validateNumber, takeUserInput, closeInput } from "../helpers.js"
+import { closeInput, takeInputInteger } from "../../helpers.js"
 
 // accepts a 4 digit absolute value int 
 const calculateSumFourDigit = async (num) => {
     // we can convert the 4 digit num to a string and split it to digits
     // then convert the digit strings back to integers
-    const digits = String(num).split('').map(digit => parseInt(digit));
+    const digits = `${num}`.split('').map(digit => parseInt(digit));
 
     const sumFirstTwo = digits[0] + digits[1];
     const sumSecondTwo = digits[2] + digits[3];
@@ -20,12 +20,10 @@ const calculateSumFourDigit = async (num) => {
 }
 
 const takeInput = async () => {
-    // convert string input to number
-    let num = +await takeUserInput("Input a 4 digit number: ");
+    // get integer input
+    let num = await takeInputInteger("Input a 4-digit number to calculate the sum of the first two and last two digits: ");
     closeInput();
-    if(validateNumber(num)) {
-        num = parseInt(num) // convert to int to prevent a float value, float values are being floored
-        
+    if(num) {
         // ensure that the number is 4 digit
         const absNum = Math.abs(num); // use absolute value to handle negative numbers
         if (absNum < 1000 || absNum > 9999) {
@@ -35,7 +33,7 @@ const takeInput = async () => {
 
         return absNum;
     } else {
-        console.log("Not a valid number")
+        console.log("Invalid input. Exiting...");
         return null;
     }
 }

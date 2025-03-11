@@ -2,10 +2,10 @@
  * Write a JavaScript code that counts the occurrences 
  * of a given digit within a given number using loops
  */
-import { takeInputNumber, takeInputNaturalNumber, closeInput } from '../helpers.js';
+import { takeInputNumber, takeInputNaturalNumber, closeInput } from '../../helpers.js';
 
 const calculateOccurances = (num, digit) => {
-    const numArray =  String(Math.abs(num)).split(''); // use abs to handle negative numbers
+    const numArray =  `${Math.abs(num)}`.split(''); // use abs to handle negative numbers
     let counter = 0;
     for(let i = 0; i < numArray.length; i++) {
         // used == to compare string to number

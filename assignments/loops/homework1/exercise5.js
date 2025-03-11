@@ -3,7 +3,7 @@
  * display a table of cubes of integers that are divisible by A. 
  */
 
-import {closeInput, takeInputNumber} from '../helpers.js';
+import {closeInput, takeInputNumber} from '../../helpers.js';
 
 const displayCubesDivisibleByA = (x, y, a) => {
     for(let i = x; i < y; i++) {

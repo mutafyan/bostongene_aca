@@ -3,7 +3,7 @@
  */
 
 
-import {closeInput, takeInputNaturalNumber, validateNumber} from '../helpers.js';
+import {closeInput, takeInputNaturalNumber} from '../../helpers.js';
 
 const printNameNTimes = (name, n) => {
     for(let i = 0; i < n; i++) {

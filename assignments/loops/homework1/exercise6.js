@@ -3,7 +3,7 @@
  * to define an array's size and input its elements via prompt. 
  */
 
-import {closeInput, takeInputNaturalNumber, takeUserInput} from '../helpers.js';
+import {closeInput, takeInputNaturalNumber, takeUserInput} from '../../helpers.js';
 
 const takeInput = async (n) => {
     const inputs = [];

@@ -2,7 +2,7 @@
  * Write a code which prints day of week.
  */
 
-import { validateNumber, takeUserInput, closeInput } from "../helpers.js";
+import { closeInput, takeInputNaturalNumber } from "../../helpers.js";
 
 const getDayOfWeek = (day) => {
     switch(day) {
@@ -18,12 +18,12 @@ const getDayOfWeek = (day) => {
 }
 
 const takeInput = async () => {
-    const day = +await takeUserInput("Input a number between 1 and 7: ");
+    const day = await takeInputNaturalNumber("Input a number between 1 and 7: ");
     closeInput();
-    if(validateNumber(day)) {
+    if(day) {
         return day;
     } else {
-        console.log("Not a valid number")
+        console.log("Invalid input. Exiting...");
         return null;
     }
 }

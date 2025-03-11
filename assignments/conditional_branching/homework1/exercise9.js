@@ -3,7 +3,7 @@
  * Write a code which checks profit or loss.
  */
 
-import { validateNumber, takeUserInput, closeInput } from "../helpers.js";
+import { closeInput, takeInputNaturalNumber } from "../../helpers.js";
 
 const checkProfitOrLoss = (costPrice, sellingPrice) => {
     if(costPrice < sellingPrice) {
@@ -16,13 +16,13 @@ const checkProfitOrLoss = (costPrice, sellingPrice) => {
 }
 
 const takeInput = async () => {
-    const costPrice = +await takeUserInput("Input cost price: ");
-    const sellingPrice = +await takeUserInput("Input selling price: ");
+    const costPrice = await takeInputNaturalNumber("Input cost price: ");
+    const sellingPrice = await takeInputNaturalNumber("Input selling price: ");
     closeInput();
-    if(validateNumber(costPrice) && validateNumber(sellingPrice)) {
+    if(costPrice && sellingPrice) {
         return { costPrice, sellingPrice };
     } else {
-        console.log("Not a valid number")
+        console.log("Invalid input. Exiting...");
         return null;
     }
 }

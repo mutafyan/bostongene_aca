@@ -4,7 +4,7 @@
  * right triangle (one angle is exactly 90 degrees), or 
  * obtuse triangle (one angle is greater than 90 degrees).
  */
-import { validateNumber, takeUserInput, closeInput } from "../helpers.js";
+import { closeInput, takeInputNaturalNumber } from "../../helpers.js";
 
 const classifyTriangle = (angle1, angle2, angle3) => {
     if(!validateTriangle(angle1, angle2, angle3)) return "Not a valid triangle";
@@ -27,15 +27,16 @@ const validateTriangle = (angle1, angle2, angle3) => {
 }
 
 const takeInput = async () => {
-    const angle1 = +await takeUserInput("Input the first angle of a triangle: ");
-    const angle2 = +await takeUserInput("Input the second angle of a triangle: ");
-    const angle3 = +await takeUserInput("Input the third angle of a triangle: ");
+    const angle1 = await takeInputNaturalNumber("Input the first angle of a triangle: ");
+    const angle2 = await takeInputNaturalNumber("Input the second angle of a triangle: ");
+    const angle3 = await takeInputNaturalNumber("Input the third angle of a triangle: ");
+    
     closeInput();
 
-    if(validateNumber(angle1) && validateNumber(angle2) && validateNumber(angle3)) {
+    if(angle1 && angle2 && angle3) {
         return { angle1, angle2, angle3 };
     } else {
-        console.log("Not a valid number")
+        console.log("Invalid input. Exiting...");
         return null;
     }
 }
