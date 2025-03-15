@@ -1,3 +1,3 @@
-import { run } from './assignments/conditional_branching/homework1_update/task9.js';
+import { run } from './assignments/loops/Loop.homework.pdf/task7.js';
 
 await run();

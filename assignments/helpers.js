@@ -58,6 +58,15 @@ export const takeInputNaturalNumber = async (message) => {
   }
 }
 
+export const getDigitsOf = (number) => {
+    if(validateInteger(number)) {
+        return `${Math.abs(number)}`.split('').map((val)=> +val);
+    } else {
+        console.log("Not a valid integer");
+        return null;
+    }
+}
+
 
 export function validateNumber(num) {
     if(typeof num === "number" && !isNaN(num)){
