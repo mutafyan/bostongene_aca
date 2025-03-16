@@ -26,34 +26,40 @@ export const closeInput = () => {
 };
 
 // close readline manually when using
-export const takeInputNumber = async (message) => {
+export const takeInputNumber = async (message, verbose = true) => {
   const input = await takeUserInput(message);
   if(!input) return null;
   const number = Number(input);
   if(validateNumber(number)) {
       return number;
   } else{
-      console.log('Please enter a valid number');
+      if(verbose) {
+        console.log('Please enter a valid number');
+      }
       return null;
   }
 }
 
-export const takeInputInteger = async (message) => {
-  const integer = await takeInputNumber(message);
+export const takeInputInteger = async (message, verbose = true) => {
+  const integer = await takeInputNumber(message, false);
   if(validateInteger(integer)) { // validate integer
       return integer;
   } else{
-      console.log('Please enter a valid integer');
+      if(verbose) {
+        console.log('Please enter a valid integer')
+      };
       return null;
   }
 }
 
-export const takeInputNaturalNumber = async (message) => {
-  const naturalNumber = await takeInputNumber(message);
+export const takeInputNaturalNumber = async (message, verbose = true) => {
+  const naturalNumber = await takeInputNumber(message, false);
   if(validateInteger(naturalNumber) && naturalNumber > 0) { // validate natural number
       return naturalNumber;
   } else{
-      console.log('Please enter a valid natural number');
+      if(verbose) {
+        console.log('Please enter a valid natural number');
+      }
       return null;
   }
 }
