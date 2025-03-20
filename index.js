@@ -1,4 +1,4 @@
-import { run } from './assignments/array_modifications/task6.js';
+import { run } from './assignments/JS_level_0_arrays_objects/task10.js';
 
 await run();
 
