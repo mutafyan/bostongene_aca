@@ -1,6 +1,31 @@
 // helper functions used throughout the project
 import readline from 'readline';
 
+export function validateNumber(num) {
+  if(typeof num === "number" && !isNaN(num)){
+    return true;
+  } else {
+    return false;
+  }
+}
+
+export function validateInteger(num) {
+  if(validateNumber(num) && Number.isInteger(num)) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+export const getDigitsOf = (number) => {
+    if(validateInteger(number)) {
+        return `${Math.abs(number)}`.split('').map((val)=> +val);
+    } else {
+        console.log("Not a valid integer");
+        return null;
+    }
+}
+
 // using node's built in readline interface to take user input from CLI
 const rl = readline.createInterface({
     input: process.stdin,
@@ -64,28 +89,4 @@ export const takeInputNaturalNumber = async (message, verbose = true) => {
   }
 }
 
-export const getDigitsOf = (number) => {
-    if(validateInteger(number)) {
-        return `${Math.abs(number)}`.split('').map((val)=> +val);
-    } else {
-        console.log("Not a valid integer");
-        return null;
-    }
-}
 
-
-export function validateNumber(num) {
-    if(typeof num === "number" && !isNaN(num)){
-        return true;
-    } else {
-        return false;
-    }
-}
-
-export function validateInteger(num) {
-    if(validateNumber(num) && Number.isInteger(num)) {
-        return true;
-    } else {
-        return false;
-    }
-}
