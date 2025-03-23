@@ -8,9 +8,13 @@
  */
 
 const myInterval = (callback, milliseconds) => {
-    for(let i = 1000; i <= milliseconds; i+=1000) {
-        setTimeout(callback, i);
-    }
+    let result = null;
+    const timeout = () => setTimeout(()=> {
+        callback();
+        timeout();
+    }, milliseconds)
+    result = timeout();
+    return result;
 }
 
-myInterval(()=>console.log("Interval"), 5000);
+myInterval(()=>console.log("Interval"), 1000);
