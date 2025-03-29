@@ -20,6 +20,6 @@ const mapPromise = (promise, transformer) => {
     return newPromise;
 }
 
-const myPromise = new Promise((resolve, reject) => { reject('a') });
+const myPromise = new Promise((resolve, reject) => { resolve(5) });
 const timesTwo = (val) => val * 2;
 mapPromise(myPromise, timesTwo).then(console.log).catch(console.log);

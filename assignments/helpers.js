@@ -27,10 +27,12 @@ export const getDigitsOf = (number) => {
 }
 
 // using node's built in readline interface to take user input from CLI
-const rl = readline.createInterface({
+const getInterface = () => {
+  return rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
   });
+}
   
 /** 
  * since .question() accepts a callback function,
@@ -39,7 +41,7 @@ const rl = readline.createInterface({
  */
 export const takeUserInput = (query) => {
     return new Promise((resolve) => {
-      rl.question(query, (answer) => {
+      getInterface().question(query, (answer) => {
         resolve(answer);
       });
     });
@@ -47,7 +49,7 @@ export const takeUserInput = (query) => {
 
 // when using readline interface, we must close it after finishing taking inputs
 export const closeInput = () => {
-    rl.close();
+    getInterface().close();
 };
 
 // close readline manually when using
