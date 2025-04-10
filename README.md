@@ -47,3 +47,5 @@ Then run in terminal using:
 ```sh
 npm start
 ```
+
+***To test react apps navigate to react folder and see instructions in chosen project README.md***

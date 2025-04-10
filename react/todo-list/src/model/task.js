@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from "uuid"; // unique id
 
 // task data model
 export default class Task {
-  constructor(title, description) {
+  constructor(title = '', description='') {
     this.id = uuidv4();
     this.title = title;
     this.description = description;
