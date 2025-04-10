@@ -7,6 +7,8 @@ const TaskItem = ({
   description,
   id,
   completed,
+  createdAt,
+  updatedAt,
   onEdit,
   onDelete,
   onComplete,
@@ -25,6 +27,14 @@ const TaskItem = ({
     onEdit(id, editedTitle, editedDescription);
     toggleEditing();
   };
+
+  const formatDate = (date) => {
+    if (!date) return "";
+    return new Date(date).toLocaleString();
+  };
+
+  const displayDate = updatedAt ? formatDate(updatedAt) : formatDate(createdAt);
+  const dateLabel = updatedAt ? "Updated" : "Created";
 
   return (
     <div className="task-item">
@@ -55,6 +65,9 @@ const TaskItem = ({
               {description}
             </p>
           )}
+          <div className="task-date">
+            {dateLabel}: {displayDate}
+          </div>
           <div className="task-actions">
             {!completed && (
               <button onClick={toggleEditing} className="btn edit-btn">
