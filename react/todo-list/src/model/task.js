@@ -9,14 +9,14 @@ export default class Task {
     this.createdAt = new Date();
     this.completed = false;
   }
+}
 
-  toggleCompleted() {
-    this.completed = !this.completed;
-  }
+Task.prototype.toggleCompleted = function() {
+  this.completed = !(this.completed);
+}
 
-  update(title, description) {
-    this.title = title;
-    this.description = description ?? this.description;
-    this.updatedAt = new Date();
-  }
+Task.prototype.update = function(title, description) {
+  this.title = title;
+  this.description = description ?? this.description;
+  this.updatedAt = new Date();
 }
