@@ -20,6 +20,9 @@ const BookItem = ({
     ? author_name.join(", ")
     : author_name;
 
+  const languageDisplay = Array.isArray(language) ? 
+    language.join(", ") : language;
+    
   return (
     <div className="book-container">
       <div className="book-cover">
@@ -30,7 +33,6 @@ const BookItem = ({
         />
       </div>
 
-      {/* Book Details */}
       <div className="book-details">
         <div className="book-header">
           <div className="book-info">
@@ -45,15 +47,16 @@ const BookItem = ({
             {language && language.length > 0 && (
               <p
                 className="book-language text-ellipsis"
-                title={Array.isArray(language) ? language.join(", ") : language}
+                title={languageDisplay}
               >
                 Language:{" "}
-                {Array.isArray(language) ? language.join(", ") : language}
+                {languageDisplay.length > 20
+                  ? `${languageDisplay.slice(0, 20)}...`
+                  : languageDisplay}
               </p>
             )}
           </div>
 
-          {/* Favorite Button */}
           <button
             onClick={toggleFavorite}
             className="favorite-button"

@@ -5,10 +5,13 @@ import {
   Select,
   MenuItem,
   Button,
+  CircularProgress,
+  Typography
 } from "@mui/material";
-import { useState, useEffect } from "react";
+import { useState, useRef } from "react";
 import "../styles/InputForm.css";
-const InputForm = ({ onSearch }) => {
+
+const InputForm = ({ onSearch, isLoading=false }) => {
   const [searchBy, setSearchBy] = useState("all");
   const [searchValue, setSearchValue] = useState("");
 
@@ -16,19 +19,24 @@ const InputForm = ({ onSearch }) => {
     setSearchBy(e.target.value);
   };
 
-  const handleSearch = () => {
-    if (!searchValue.trim()) return;
-    onSearch(searchValue, searchBy);
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setSearchValue(value);
+
+    onSearch(value, searchBy, true); // pass true for debouncing
   };
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === "Enter") {
-        handleSearch();
-      }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [searchValue, searchBy]);
+
+  const handleSubmit = () => {
+    if (searchValue.trim()) {
+      onSearch(searchValue, searchBy);
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSubmit();
+    }
+  };
 
   return (
     <FormControl
@@ -50,7 +58,7 @@ const InputForm = ({ onSearch }) => {
         value={searchBy}
         label="Search by"
         onChange={handleSearchByChange}
-        sx={{ minWidth: 80, width: "fit-content" }}
+        sx={{ minWidth: 80 }}
       >
         <MenuItem value="all">All</MenuItem>
         <MenuItem value="title">Title</MenuItem>
@@ -61,13 +69,14 @@ const InputForm = ({ onSearch }) => {
       <TextField
         size="small"
         value={searchValue}
-        onChange={(e) => setSearchValue(e.target.value)}
+        onChange={handleInputChange}
         placeholder="Search here..."
         className="search-input"
+        onKeyDown={handleKeyDown}
       />
 
-      <Button variant="contained" onClick={handleSearch}>
-        Search
+      <Button variant="contained" onClick={handleSubmit}>
+        {isLoading ? <CircularProgress size={24} color="white"/> : 'Search' }
       </Button>
     </FormControl>
   );
