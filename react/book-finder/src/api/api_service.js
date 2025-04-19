@@ -13,31 +13,39 @@ const getURL = (searchBy) => {
   }
 };
 
-export const search = async (searchValue, searchBy, page) => {
+export const search = async (searchValue, searchBy = "all", page = 1) => {
+  const url = `${getURL(searchBy)}${encodeURIComponent(
+    searchValue
+  )}&limit=${RESULTS_PER_PAGE}&page=${page}`;
+
   try {
-    let query = getURL(searchBy) + encodeURIComponent(searchValue) + `&limit=${RESULTS_PER_PAGE}`;
-    if (page) {
-      query += `&page=${page}`;
-    }
-    console.log("query", query);
-    const resPromise = await fetch(query);
-    const res = await resPromise.json();
+    const res = await fetch(url);
 
-    if (res.statusCode === 503) {
-      throw new Error("Service Unavailable. Please try again later.");
+    if (!res.ok) {
+      throw new Error(`OpenLibrary error: ${res.status} ${res.statusText}`);
     }
 
-    if (res && res.docs) {
+    const json = await res.json();
+
+    if (!json.docs || !Array.isArray(json.docs)) {
+      return { data: [], totalPages: 0 };
+    }
+
+    const data = json.docs.map((book) => {
+      const { cover_i, ...rest } = book;
       return {
-        data: formatData(res.docs),
-        totalPages: Math.ceil(res.numFound / RESULTS_PER_PAGE),
+        ...rest,
+        coverUrl: cover_i
+          ? `https://covers.openlibrary.org/b/id/${cover_i}.jpg`
+          : null,
       };
-    }
+    });
 
-    return null;
+    const totalPages = Math.ceil(json.numFound / RESULTS_PER_PAGE);
+    return { data, totalPages };
   } catch (err) {
-    console.log(err.message);
-    return null;
+    console.error("Search error:", err);
+    throw err;
   }
 };
 

@@ -6,14 +6,14 @@ import {
   MenuItem,
   Button,
   CircularProgress,
-  Typography
 } from "@mui/material";
-import { useState, useRef } from "react";
+import { useState } from "react";
 import "../styles/InputForm.css";
 
-const InputForm = ({ onSearch, isLoading=false }) => {
+const InputForm = ({ onSearch, isLoading = false }) => {
   const [searchBy, setSearchBy] = useState("all");
-  const [searchValue, setSearchValue] = useState("");
+  const [inputValue, setInputValue] = useState("");
+  const [error, setError] = useState(false);
 
   const handleSearchByChange = (e) => {
     setSearchBy(e.target.value);
@@ -21,15 +21,21 @@ const InputForm = ({ onSearch, isLoading=false }) => {
 
   const handleInputChange = (e) => {
     const value = e.target.value;
-    setSearchValue(value);
-
-    onSearch(value, searchBy, true); // pass true for debouncing
+    setInputValue(value);
+    if (!value.trim() && value.length > 0) {
+      setError(true);
+    } else {
+      if (error) setError(false);
+      onSearch(value, searchBy, true);
+    }
   };
 
   const handleSubmit = () => {
-    if (searchValue.trim()) {
-      onSearch(searchValue, searchBy);
+    if (!inputValue.trim() && inputValue.length > 0) {
+      setError(true);
+      return;
     }
+    onSearch(inputValue, searchBy, false);
   };
 
   const handleKeyDown = (e) => {
@@ -40,14 +46,13 @@ const InputForm = ({ onSearch, isLoading=false }) => {
 
   return (
     <FormControl
-      className="form-control"
+      error={error}
       sx={{
-        minWidth: "fit-content",
         display: "flex",
         flexDirection: "row",
-        justifyContent: "center",
         alignItems: "center",
-        gap: "8px",
+        justifyContent: "center",
+        gap: 1,
       }}
       fullWidth
       size="small"
@@ -58,7 +63,7 @@ const InputForm = ({ onSearch, isLoading=false }) => {
         value={searchBy}
         label="Search by"
         onChange={handleSearchByChange}
-        sx={{ minWidth: 80 }}
+        sx={{ minWidth: 100 }}
       >
         <MenuItem value="all">All</MenuItem>
         <MenuItem value="title">Title</MenuItem>
@@ -67,16 +72,18 @@ const InputForm = ({ onSearch, isLoading=false }) => {
       </Select>
 
       <TextField
+        sx={{ justifySelf: "center" }}
         size="small"
-        value={searchValue}
+        value={inputValue}
         onChange={handleInputChange}
-        placeholder="Search here..."
-        className="search-input"
         onKeyDown={handleKeyDown}
+        placeholder="Search here..."
+        error={error}
+        helperText={error ? "Please enter a valid input" : ""}
       />
 
       <Button variant="contained" onClick={handleSubmit}>
-        {isLoading ? <CircularProgress size={24} color="white"/> : 'Search' }
+        {isLoading ? <CircularProgress size={24} color="inherit" /> : "Search"}
       </Button>
     </FormControl>
   );

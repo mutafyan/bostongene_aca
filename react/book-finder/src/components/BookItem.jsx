@@ -1,76 +1,140 @@
-import { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardMedia,
+  Typography,
+  IconButton,
+  Box,
+} from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import "../styles/BookItem.css";
 import defaultCover from "../assets/default_book_cover.jpg";
 
 const BookItem = ({
+  id,
   title,
   author_name = "Unknown Author",
   first_publish_year = "Unknown Year",
   language = [],
   coverUrl = null,
+  isFavorite,
+  onToggleFavorite,
 }) => {
-  const [isFavorite, setIsFavorite] = useState(false);
-
-  const toggleFavorite = () => {
-    setIsFavorite(!isFavorite);
-  };
-
   const authorDisplay = Array.isArray(author_name)
     ? author_name.join(", ")
     : author_name;
 
-  const languageDisplay = Array.isArray(language) ? 
-    language.join(", ") : language;
-    
+  const languageDisplay = Array.isArray(language)
+    ? language.join(", ")
+    : language;
+
   return (
-    <div className="book-container">
-      <div className="book-cover">
-        <img
-          src={coverUrl || defaultCover}
-          alt={`Cover of ${title}`}
-          className="cover-image"
-        />
-      </div>
+    <Card
+      sx={{
+        display: "flex",
+        flexDirection: { xs: "column", md: "row" },
+        height: { xs: "24rem", md: "16rem" },
+        maxWidth: "31rem",
+        width: "100%",
+        boxShadow: 3,
+        borderRadius: 2,
+        overflow: "hidden",
+        backgroundColor: "#fff",
+      }}
+    >
+      <CardMedia
+        component="img"
+        image={coverUrl || defaultCover}
+        alt={`Cover of ${title}`}
+        sx={{
+          width: { xs: "100%", md: "12rem" },
+          height: "16rem",
+          objectFit: "cover",
+          backgroundColor: "#e2e8f0",
+          flexShrink: 0,
+        }}
+      />
 
-      <div className="book-details">
-        <div className="book-header">
-          <div className="book-info">
-            <h2 className="book-title text-ellipsis" title={title}>
-              {title}
-            </h2>
-            <p className="book-author text-ellipsis" title={authorDisplay}>
-              by {authorDisplay}
-            </p>
-            <p className="book-year">Published: {first_publish_year}</p>
-
-            {language && language.length > 0 && (
-              <p
-                className="book-language text-ellipsis"
-                title={languageDisplay}
-              >
-                Language:{" "}
-                {languageDisplay.length > 20
-                  ? `${languageDisplay.slice(0, 20)}...`
-                  : languageDisplay}
-              </p>
-            )}
-          </div>
-
-          <button
-            onClick={toggleFavorite}
-            className="favorite-button"
-            aria-label={
-              isFavorite ? "Remove from favorites" : "Add to favorites"
-            }
+      <CardContent
+        sx={{
+          p: 2,
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          overflow: "hidden",
+        }}
+      >
+        <Box sx={{ overflow: "hidden", flex: 1 }}>
+          <Typography
+            variant="h6"
+            title={title}
+            sx={{
+              fontWeight: 700,
+              fontSize: "1.2rem",
+              color: "#1a202c",
+              mb: 0.5,
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+            }}
           >
-            <FavoriteIcon
-              className={isFavorite ? "heart-icon favorite" : "heart-icon"}
-            />
-          </button>
-        </div>
-      </div>
-    </div>
+            {title}
+          </Typography>
+
+          <Typography
+            variant="body2"
+            title={authorDisplay}
+            sx={{
+              color: "#4a5568",
+              mb: 1,
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+            }}
+          >
+            by{" "}
+            {authorDisplay.length > 20
+              ? `${authorDisplay.slice(0, 20)}...`
+              : authorDisplay}
+          </Typography>
+
+          <Typography
+            variant="body2"
+            sx={{ color: "#718096", fontSize: "0.875rem", mb: 1 }}
+          >
+            Published: {first_publish_year}
+          </Typography>
+
+          {languageDisplay && (
+            <Typography
+              variant="body2"
+              title={languageDisplay}
+              sx={{
+                color: "#718096",
+                mb: 1,
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+              }}
+            >
+              Language:{" "}
+              {languageDisplay.length > 20
+                ? `${languageDisplay.slice(0, 20)}...`
+                : languageDisplay}
+            </Typography>
+          )}
+        </Box>
+
+        <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 1 }}>
+          <IconButton
+            onClick={onToggleFavorite}
+            sx={{ p: 0, ml: 1, color: isFavorite ? "#f56565" : "#a0aec0" }}
+          >
+            <FavoriteIcon />
+          </IconButton>
+        </Box>
+      </CardContent>
+    </Card>
   );
 };
 

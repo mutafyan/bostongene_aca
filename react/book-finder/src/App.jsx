@@ -1,19 +1,18 @@
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import "./App.css";
 import { search } from "./api/api_service";
 import BookList from "./components/BookList";
 import {
   Container,
   Box,
-  Paper,
   Typography,
   Pagination,
   CircularProgress,
   Divider,
 } from "@mui/material";
-import InputForm from "./components/InputForm";
+import SearchAppBar from "./components/SearchAppBar";
 
-function App() {
+const App = () => {
   const [searchResult, setSearchResult] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
@@ -21,10 +20,11 @@ function App() {
   const [searchBy, setSearchBy] = useState("all");
   const [isLoading, setIsLoading] = useState(false);
   const [randomTopic, setRandomTopic] = useState(null);
+  const [isDebouncing, setIsDebouncing] = useState(false);
   const debounceTimeout = useRef(null);
 
   const hasResults = searchResult.length > 0;
-  const isInitial = !searchValue.trim();
+  const isInitial = !searchValue.trim() && searchValue.length === 0;
 
   // get random books on initial load or when searchValue is cleared
   useEffect(() => {
@@ -36,7 +36,6 @@ function App() {
       const chosenTopic = topics[Math.floor(Math.random() * topics.length)];
       setRandomTopic(chosenTopic);
       const { data } = await search(chosenTopic, "subject");
-      console.log("got random books for topic", chosenTopic);
       setSearchResult(data);
       setTotalPages(1);
       setPage(1);
@@ -46,55 +45,63 @@ function App() {
     getRandomBooks();
   }, [searchValue]);
 
+  const validateResponse = (response) =>
+    response &&
+    Array.isArray(response.data) &&
+    typeof response.totalPages === "number";
+
   const handleSearch = useCallback(
-    (value, by, isDebouncing = false, currentPage = 1) => {
-      const doSearch = async () => {
+    (value, by, debounce = false, currentPage = 1) => {
+      const doSearch = async (isDebounced, pageNum) => {
         if (!value.trim()) {
-          setSearchValue(""); // will trigger  useEffect to get random books
+          setSearchValue("");
           setSearchResult([]);
           setTotalPages(0);
           setPage(1);
+          if (isDebounced) setIsDebouncing(false);
           return;
         }
 
-        setIsLoading(true);
+        if (!isDebounced) setIsLoading(true);
+
         setSearchValue(value);
         setSearchBy(by);
 
-        const response = await search(value, by, currentPage);
+        const response = await search(value, by, pageNum);
         if (!validateResponse(response)) {
           setSearchResult([]);
           setTotalPages(0);
           setPage(1);
-          setIsLoading(false);
-          return;
+        } else {
+          setSearchResult(response.data);
+          setTotalPages(response.totalPages);
+          setPage(pageNum);
         }
 
-        const { data, totalPages } = response;
-        setSearchResult(data);
-        setTotalPages(totalPages);
-        setPage(currentPage);
-        setIsLoading(false);
+        if (!isDebounced) setIsLoading(false);
+        if (isDebounced) setIsDebouncing(false);
       };
 
-      if (isDebouncing) {
+      if (debounce) {
         if (debounceTimeout.current) clearTimeout(debounceTimeout.current);
-        debounceTimeout.current = setTimeout(doSearch, 500);
+        setIsDebouncing(true);
+        debounceTimeout.current = setTimeout(
+          () => doSearch(true, currentPage),
+          500
+        );
       } else {
-        doSearch();
+        setIsDebouncing(false);
+        doSearch(false, currentPage);
       }
     },
     []
   );
 
-  const validateResponse = (response) =>
-    !!(response && response.data && response.totalPages);
-
   useEffect(() => {
     if (!searchValue.trim()) return;
     handleSearch(searchValue, searchBy, false, page);
     window.scrollTo({ top: 0, behavior: "auto" });
-  }, [page]);
+  }, [page, searchValue, searchBy]);
 
   useEffect(() => {
     return () => {
@@ -106,24 +113,11 @@ function App() {
 
   return (
     <Container maxWidth="lg" className="app-container">
-      <Paper
-        className={`search-bar-container ${hasResults ? "pinned" : ""}`}
-        sx={{ backgroundColor: "hsl(41.2, 47.1%, 97.3%)" }}
-      >
-        <Box className="search-bar-content">
-          <Typography variant="h4" component="h1" className="app-title">
-            BookFinder
-          </Typography>
-          <Box className="search-controls">
-            <InputForm
-              onSearch={(val, by, isDebouncing) =>
-                handleSearch(val, by, isDebouncing)
-              }
-              isLoading={!isInitial && isLoading}
-            />
-          </Box>
-        </Box>
-      </Paper>
+      <SearchAppBar
+        hasResults={hasResults}
+        handleSearch={handleSearch}
+        isLoading={isDebouncing || (!isInitial && isLoading)}
+      />
 
       {isInitial && isLoading ? (
         <Box sx={{ mt: 4, display: "flex", justifyContent: "center" }}>
@@ -132,16 +126,14 @@ function App() {
       ) : hasResults ? (
         <Box className="search-result">
           {isInitial && (
-            <Box sx={{ width: "100%", mb: 2 }}>
-              <Typography
-                variant="h5"
-                component="h5"
-                sx={{ fontWeight: "500", mb: 1 }}
-              >
-                Explore today's topic: {randomTopic}
-              </Typography>
-              <Divider />
-            </Box>
+            <>
+              <Box sx={{ width: "100%", mb: 2 }}>
+                <Typography variant="h5" sx={{ fontWeight: 500, mb: 1 }}>
+                  Explore today's topic: {randomTopic}
+                </Typography>
+                <Divider />
+              </Box>
+            </>
           )}
 
           <BookList books={searchResult} />
@@ -157,13 +149,13 @@ function App() {
         </Box>
       ) : (
         <Box sx={{ mt: 4, display: "flex", justifyContent: "center" }}>
-          <Typography variant="h6" component="p">
+          <Typography variant="h6">
             No results found for "{searchValue}"
           </Typography>
         </Box>
       )}
     </Container>
   );
-}
+};
 
 export default App;
