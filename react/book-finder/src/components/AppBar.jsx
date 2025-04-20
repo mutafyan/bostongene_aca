@@ -1,6 +1,6 @@
 import { Paper, Box, Typography } from "@mui/material";
 import InputForm from "./InputForm";
-
+import '../styles/AppBar.css';
 const AppBar = ({ hasResults, handleSearch, isLoading, isDisabled }) => {
   return (
     <Paper

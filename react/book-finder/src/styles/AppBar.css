@@ -1,0 +1,23 @@
+.search-bar-container {
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  padding: 24px;
+  margin-bottom: 32px;
+  transition: all 0.3s ease;
+}
+
+.search-bar-container.pinned {
+  width: 80%;
+  margin-bottom: 16px;
+  align-self: center;
+}
+
+.search-bar-content {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
