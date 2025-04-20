@@ -1,12 +1,11 @@
 import { useState, useEffect, useMemo, useCallback, memo } from "react";
-import { Grid } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import BookItem from "./BookItem";
-import { getBooksByKeys } from "../api/api_service";
-import { STORAGE_KEY } from "../api/constants";
+import { STORAGE_FAVORITES_KEY } from "../api/constants";
 
 const getStoredFavorites = () => {
   try {
-    const data = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    const data = JSON.parse(localStorage.getItem(STORAGE_FAVORITES_KEY));
     return Array.isArray(data) ? data : [];
   } catch {
     return [];
@@ -14,35 +13,39 @@ const getStoredFavorites = () => {
 };
 
 const BookList = ({ books, showFavorites }) => {
-  const [favoriteKeys, setFavoriteKeys] = useState(getStoredFavorites);
-  const [favoriteBooks, setFavoriteBooks] = useState([]);
+  const [favoriteBooks, setFavoriteBooks] = useState(getStoredFavorites);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(favoriteKeys));
-  }, [favoriteKeys]);
+    localStorage.setItem(STORAGE_FAVORITES_KEY, JSON.stringify(favoriteBooks));
+  }, [favoriteBooks]);
 
-  useEffect(() => {
-    const loadFavorites = async () => {
-      const data = await getBooksByKeys(favoriteKeys);
-      setFavoriteBooks(data);
-    };
-
-    if (showFavorites && favoriteKeys.length > 0) {
-      loadFavorites();
-    }
-  }, [favoriteKeys, showFavorites]);
-
-  const toggleFavorite = useCallback((key) => {
-    setFavoriteKeys((prev) =>
-      prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]
-    );
+  const toggleFavorite = useCallback((book) => {
+    setFavoriteBooks((prev) => {
+      const exists = prev.some((b) => b.key === book.key);
+      if (exists) {
+        return prev.filter((b) => b.key !== book.key);
+      } else {
+        const minimalBook = {
+          key: book.key,
+          title: book.title,
+          author_name: book.author_name,
+          first_publish_year: book.first_publish_year,
+          coverUrl: book.coverUrl,
+        };
+        return [...prev, minimalBook];
+      }
+    });
   }, []);
 
+  const favoriteKeys = useMemo(
+    () => new Set(favoriteBooks.map((b) => b.key)),
+    [favoriteBooks]
+  );
+
   const booksWithFavorites = useMemo(() => {
-    const favSet = new Set(favoriteKeys);
     return books.map((book) => ({
       ...book,
-      isFavorite: favSet.has(book.key),
+      isFavorite: favoriteKeys.has(book.key),
     }));
   }, [books, favoriteKeys]);
 
@@ -54,6 +57,11 @@ const BookList = ({ books, showFavorites }) => {
       spacing={3}
       sx={{ mt: 2, alignItems: "center", justifyContent: "center" }}
     >
+      {showFavorites && favoriteBooks.length === 0 && (
+        <Typography variant="h6" sx={{ fontWeight: 500, mb: 1 }}>
+          No favorite books to display
+        </Typography>
+      )}
       {booksToRender.map((book) => (
         <Grid item xs={12} sm={6} key={book.key} sx={{ height: "100%" }}>
           <BookItem
@@ -63,8 +71,8 @@ const BookList = ({ books, showFavorites }) => {
             first_publish_year={book.first_publish_year}
             language={book.language}
             coverUrl={book.coverUrl}
-            isFavorite={favoriteKeys.includes(book.key)}
-            onToggleFavorite={() => toggleFavorite(book.key)}
+            isFavorite={favoriteKeys.has(book.key)}
+            onToggleFavorite={() => toggleFavorite(book)}
           />
         </Grid>
       ))}

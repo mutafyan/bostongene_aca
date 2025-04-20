@@ -55,6 +55,8 @@ const formatData = (books) => {
   }));
 };
 
+
+// not used but useful
 export const getBooksByKeys = async (keys = []) => {
   return await Promise.all(
     keys.map((key) => getBookByKey(key))
@@ -77,6 +79,4 @@ const getBookByKey = async (key) => {
   }
 };
 
-const formatFavBooks = (json) => {
-    json
-}
+
