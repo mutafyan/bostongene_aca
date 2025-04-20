@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo, useCallback, memo } from "react";
 import { Grid, Typography } from "@mui/material";
 import BookItem from "./BookItem";
 import { STORAGE_FAVORITES_KEY } from "../api/constants";
+import { useFavorite } from "../context/FavoriteContext";
 
 const getStoredFavorites = () => {
   try {
@@ -12,9 +13,9 @@ const getStoredFavorites = () => {
   }
 };
 
-const BookList = ({ books, showFavorites }) => {
+const BookList = ({ books }) => {
   const [favoriteBooks, setFavoriteBooks] = useState(getStoredFavorites);
-
+  const {showFavorites} = useFavorite();
   useEffect(() => {
     localStorage.setItem(STORAGE_FAVORITES_KEY, JSON.stringify(favoriteBooks));
   }, [favoriteBooks]);

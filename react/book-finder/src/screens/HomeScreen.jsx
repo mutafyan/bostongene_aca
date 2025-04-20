@@ -11,8 +11,9 @@ import {
   Divider,
 } from "@mui/material";
 import AppBar from "../components/AppBar";
+import { useFavorite } from "../context/FavoriteContext";
 
-const HomeScreen = ({ showFavorites }) => {
+const HomeScreen = () => {
   const [searchResult, setSearchResult] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
@@ -22,7 +23,7 @@ const HomeScreen = ({ showFavorites }) => {
   const [randomTopic, setRandomTopic] = useState(null);
   const [isDebouncing, setIsDebouncing] = useState(false);
   const debounceTimeout = useRef(null);
-
+    const {showFavorites} = useFavorite();
   const hasResults = searchResult.length > 0;
   const isInitial = !searchValue.trim() && searchValue.length === 0;
 
@@ -150,7 +151,7 @@ const HomeScreen = ({ showFavorites }) => {
             )
           )}
 
-          <BookList books={searchResult} showFavorites={showFavorites} />
+          <BookList books={searchResult} />
           {searchValue && totalPages > 1 && (
             <Pagination
               count={totalPages}

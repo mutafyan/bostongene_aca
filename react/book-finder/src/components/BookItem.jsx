@@ -133,13 +133,13 @@ const BookItem = ({
             <FavoriteIcon />
           </IconButton>
         </Box>
+        <Snackbar
+          open={showToast}
+          autoHideDuration={2000}
+          onClose={() => setShowToast(false)}
+          message={isFavorite ? "Added to favorites" : "Removed from favorites"}
+        />
       </CardContent>
-      <Snackbar
-        open={showToast}
-        autoHideDuration={3000}
-        onClose={() => setShowToast(false)}
-        message={isFavorite ? "Added to favorites" : "Removed from favorites" }
-      />
     </Card>
   );
 };
