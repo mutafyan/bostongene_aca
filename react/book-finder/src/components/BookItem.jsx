@@ -5,9 +5,11 @@ import {
   Typography,
   IconButton,
   Box,
+  Snackbar,
 } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import defaultCover from "../assets/default_book_cover.jpg";
+import { useState } from "react";
 
 const BookItem = ({
   id,
@@ -19,6 +21,7 @@ const BookItem = ({
   isFavorite,
   onToggleFavorite,
 }) => {
+  const [showToast, setShowToast] = useState(false);
   const authorDisplay = Array.isArray(author_name)
     ? author_name.join(", ")
     : author_name;
@@ -26,6 +29,11 @@ const BookItem = ({
   const languageDisplay = Array.isArray(language)
     ? language.join(", ")
     : language;
+
+  const handleToggleFavorite = () => {
+    setShowToast(true);
+    onToggleFavorite();
+  };
 
   return (
     <Card
@@ -94,10 +102,7 @@ const BookItem = ({
               : authorDisplay}
           </Typography>
 
-          <Typography
-            variant="body2"
-            sx={{ fontSize: "0.875rem", mb: 1 }}
-          >
+          <Typography variant="body2" sx={{ fontSize: "0.875rem", mb: 1 }}>
             Published: {first_publish_year}
           </Typography>
 
@@ -122,13 +127,19 @@ const BookItem = ({
 
         <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 1 }}>
           <IconButton
-            onClick={onToggleFavorite}
+            onClick={handleToggleFavorite}
             sx={{ p: 0, ml: 1, color: isFavorite ? "#f56565" : "#a0aec0" }}
           >
             <FavoriteIcon />
           </IconButton>
         </Box>
       </CardContent>
+      <Snackbar
+        open={showToast}
+        autoHideDuration={3000}
+        onClose={() => setShowToast(false)}
+        message={isFavorite ? "Added to favorites" : "Removed from favorites" }
+      />
     </Card>
   );
 };
