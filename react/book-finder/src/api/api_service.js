@@ -31,21 +31,12 @@ export const search = async (searchValue, searchBy = "all", page = 1) => {
       return { data: [], totalPages: 0 };
     }
 
-    const data = json.docs.map((book) => {
-      const { cover_i, ...rest } = book;
-      return {
-        ...rest,
-        coverUrl: cover_i
-          ? `https://covers.openlibrary.org/b/id/${cover_i}.jpg`
-          : null,
-      };
-    });
+    const data = formatData(json.docs);
 
     const totalPages = Math.ceil(json.numFound / RESULTS_PER_PAGE);
     return { data, totalPages };
   } catch (err) {
     console.error("Search error:", err);
-    throw err;
   }
 };
 
@@ -63,3 +54,29 @@ const formatData = (books) => {
     ...tail,
   }));
 };
+
+export const getBooksByKeys = async (keys = []) => {
+  return await Promise.all(
+    keys.map((key) => getBookByKey(key))
+  );
+};
+
+const getBookByKey = async (key) => {
+  try {
+    const res = await fetch(`https://openlibrary.org${key}.json`); // key looks like /works/OLW6787W
+    const json = await res.json();
+
+    if (!res.ok) {
+      throw new Error(`OpenLibrary error: ${res.status} ${res.statusText}`);
+    }
+    console.log(json);
+    return json;
+  } catch (err) {
+    console.log(err.message);
+    throw err;
+  }
+};
+
+const formatFavBooks = (json) => {
+    json
+}

@@ -38,7 +38,6 @@ const BookItem = ({
         boxShadow: 3,
         borderRadius: 2,
         overflow: "hidden",
-        backgroundColor: "#fff",
       }}
     >
       <CardMedia
@@ -49,7 +48,6 @@ const BookItem = ({
           width: { xs: "100%", md: "12rem" },
           height: "16rem",
           objectFit: "cover",
-          backgroundColor: "#e2e8f0",
           flexShrink: 0,
         }}
       />
@@ -71,7 +69,6 @@ const BookItem = ({
             sx={{
               fontWeight: 700,
               fontSize: "1.2rem",
-              color: "#1a202c",
               mb: 0.5,
               whiteSpace: "nowrap",
               overflow: "hidden",
@@ -85,7 +82,6 @@ const BookItem = ({
             variant="body2"
             title={authorDisplay}
             sx={{
-              color: "#4a5568",
               mb: 1,
               whiteSpace: "nowrap",
               overflow: "hidden",
@@ -100,7 +96,7 @@ const BookItem = ({
 
           <Typography
             variant="body2"
-            sx={{ color: "#718096", fontSize: "0.875rem", mb: 1 }}
+            sx={{ fontSize: "0.875rem", mb: 1 }}
           >
             Published: {first_publish_year}
           </Typography>
@@ -110,7 +106,6 @@ const BookItem = ({
               variant="body2"
               title={languageDisplay}
               sx={{
-                color: "#718096",
                 mb: 1,
                 whiteSpace: "nowrap",
                 overflow: "hidden",

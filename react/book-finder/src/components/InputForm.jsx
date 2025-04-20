@@ -10,7 +10,7 @@ import {
 import { useState } from "react";
 import "../styles/InputForm.css";
 
-const InputForm = ({ onSearch, isLoading = false }) => {
+const InputForm = ({ onSearch, isLoading = false, isDisabled=false }) => {
   const [searchBy, setSearchBy] = useState("all");
   const [inputValue, setInputValue] = useState("");
   const [error, setError] = useState(false);
@@ -64,6 +64,7 @@ const InputForm = ({ onSearch, isLoading = false }) => {
         label="Search by"
         onChange={handleSearchByChange}
         sx={{ minWidth: 100 }}
+        disabled={isDisabled}
       >
         <MenuItem value="all">All</MenuItem>
         <MenuItem value="title">Title</MenuItem>
@@ -80,9 +81,10 @@ const InputForm = ({ onSearch, isLoading = false }) => {
         placeholder="Search here..."
         error={error}
         helperText={error ? "Please enter a valid input" : ""}
+        disabled={isDisabled}
       />
 
-      <Button variant="contained" onClick={handleSubmit}>
+      <Button variant="contained" onClick={handleSubmit} disabled={isDisabled}>
         {isLoading ? <CircularProgress size={24} color="inherit" /> : "Search"}
       </Button>
     </FormControl>

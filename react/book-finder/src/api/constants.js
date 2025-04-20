@@ -6,4 +6,7 @@ export const URLS = {
   BASE_SEARCH_BY_SUBJECT_URL: "https://openlibrary.org/search.json?subject=",
 };
 
+export const STORAGE_KEY = "favoriteKeys";
+
+
 export const RESULTS_PER_PAGE = 20;
