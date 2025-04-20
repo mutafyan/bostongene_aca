@@ -18,7 +18,7 @@ const BookItem = ({
   first_publish_year = "Unknown Year",
   language = [],
   coverUrl = null,
-  isFavorite,
+  isFavorite = false,
   onToggleFavorite,
 }) => {
   const [showToast, setShowToast] = useState(false);

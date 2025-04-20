@@ -31,6 +31,7 @@ const BookList = ({ books, showFavorites }) => {
           author_name: book.author_name,
           first_publish_year: book.first_publish_year,
           coverUrl: book.coverUrl,
+          isFavorite: true,
         };
         return [...prev, minimalBook];
       }
