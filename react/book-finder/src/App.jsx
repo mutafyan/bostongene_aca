@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   createTheme,
   ThemeProvider,
@@ -11,13 +11,22 @@ import HomeScreen from "./screens/HomeScreen";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import { STORAGE_THEME_KEY } from "./api/constants";
+
+const getThemeMode = () => localStorage.getItem(STORAGE_THEME_KEY) ?? 'light';
 
 const App = () => {
-  const [mode, setMode] = useState("light");
+  const [mode, setMode] = useState(getThemeMode);
   const [showFavorites, setShowFavorites] = useState(false);
+  
+  useEffect(()=>{
+    localStorage.setItem(STORAGE_THEME_KEY, mode);
+  }, [mode]);
 
-  const toggleDarkMode = () =>
-    setMode((prev) => (prev === "light" ? "dark" : "light"));
+
+  const toggleDarkMode = () => {
+    setMode((prev) => prev === "light" ? "dark" : "light");
+  };
   const toggleFavorites = () => setShowFavorites((prev) => !prev);
 
   const theme = useMemo(

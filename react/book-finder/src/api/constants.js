@@ -7,5 +7,5 @@ export const URLS = {
 };
 
 export const STORAGE_FAVORITES_KEY = "favorites";
-
+export const STORAGE_THEME_KEY = "themeMode";
 export const RESULTS_PER_PAGE = 20;
