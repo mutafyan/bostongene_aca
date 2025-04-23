@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import ProductGrid from "./components/ProductGrid";
+import { CartProvider } from "./context/CartContext";
 
 function App() {
   const [products, setProducts] = useState([]);
@@ -18,12 +19,14 @@ function App() {
       });
   }, []);
   return (
-    <div>
-      <h1>Fake Store</h1>
-      {loading && <p>Loading...</p>}
-      {error && <p>Error: {error.message}</p>}
-      {!loading && !error && products && <ProductGrid products={products} />}
-    </div>
+    <CartProvider>
+      <div>
+        <h1>Fake Store</h1>
+        {loading && <p>Loading...</p>}
+        {error && <p>Error: {error.message}</p>}
+        {!loading && !error && products && <ProductGrid products={products} />}
+      </div>
+    </CartProvider>
   );
 }
 

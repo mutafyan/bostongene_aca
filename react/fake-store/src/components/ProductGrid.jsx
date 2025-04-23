@@ -4,9 +4,9 @@ import "../styles/ProductGrid.css";
 const ProductGrid = ({ products }) => {
   return (
     <div className="product-grid">
-      {products.map(({id, ...rest}) => (
-        <ProductCard key={id} {...rest} />
-      ))}
+      {products.map((product) => {
+        return <ProductCard key={product.id} product={product} />
+      })}
     </div>
   );
 };

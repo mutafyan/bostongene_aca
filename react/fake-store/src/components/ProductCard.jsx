@@ -12,21 +12,30 @@
 //   },
 // };
 
+import { useCart } from '../context/CartContext';
+import { ACTIONS } from '../context/cartReducer';
 import '../styles/ProductCard.css';
 
-const ProductCard = ({
-  title,
-  description,
-  image,
-  price,
-  rating,
-}) => {
+const ProductCard = ({product}) => {
+  const {
+    title,
+    description,
+    image,
+    price,
+    rating,
+  } = product;
+  const { cart, dispatch} = useCart();
+  const handleAddToCart = () => {
+    dispatch({type: ACTIONS.ADD_TO_CART, payload: product})
+    console.log("cart:", cart)
+  }
   return (
     <div className="product-card">
       <img src={image} alt={title} />
       <h3>{title}</h3>
       <p><strong>${price}</strong></p>
       <p>⭐<strong>{rating.rate}</strong> ({rating.count} ratings)</p>
+      <button onClick={handleAddToCart}>➕ Add to cart</button>
     </div>
   );
 };
