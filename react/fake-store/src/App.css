@@ -1,6 +1,26 @@
 #root {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 80%;
+  max-width: 1280px;
+  background-color: aliceblue;
+  margin: 0 auto;
+  height: 15vh;
+  padding: 0 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.cart-button {
+  font-size: 1.5rem;
+  text-decoration: none;
+  cursor: pointer;
 }

@@ -1,33 +1,16 @@
-import { useEffect, useState } from "react";
 import "./App.css";
-import ProductGrid from "./components/ProductGrid";
 import { CartProvider } from "./context/CartContext";
+import { Routes, Route } from "react-router";
+import HomeScreen from "./screens/HomeScreen";
+import CartScreen from "./screens/CartScreen";
 
-function App() {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  useEffect(() => {
-    fetch("https://fakestoreapi.com/products")
-      .then((res) => res.json())
-      .then((res) => setProducts(res))
-      .catch((err) => {
-        setError(err);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, []);
-  return (
-    <CartProvider>
-      <div>
-        <h1>Fake Store</h1>
-        {loading && <p>Loading...</p>}
-        {error && <p>Error: {error.message}</p>}
-        {!loading && !error && products && <ProductGrid products={products} />}
-      </div>
-    </CartProvider>
-  );
-}
+const App = () => (
+  <CartProvider>
+    <Routes>
+      <Route path="/home" element={<HomeScreen />} />
+      <Route path="/cart" element={<CartScreen />} />
+    </Routes>
+  </CartProvider>
+);
 
 export default App;

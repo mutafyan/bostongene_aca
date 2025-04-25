@@ -1,5 +1,7 @@
 export const initialState = {
   cartItems: [],
+  totalPrice: 0,
+  totalItems: 0,
 };
 
 export const ACTIONS = Object.freeze({
@@ -11,41 +13,58 @@ export const ACTIONS = Object.freeze({
 export const cartReducer = (state, action) => {
   switch (action.type) {
     case ACTIONS.ADD_TO_CART: {
-      const alreadyAdded = state.cartItems.find(
-        (item) => item.id === action.payload.id
-      );
-      if (alreadyAdded) {
-        return {
-          ...state,
-          cartItems: state.cartItems.map((item) =>
-            item.id === action.payload.id
-              ? { ...item, quantity: item.quantity + 1 } // ++ the quantity if already in cart
-              : item
-          ),
-        };
+      const existingItem = state.cartItems.find(item => item.id === action.payload.id);
+      
+      let updatedCartItems = [];
+
+      if (existingItem) {
+        updatedCartItems = state.cartItems.map(item =>
+          item.id === action.payload.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
       } else {
-        return {
-          ...state,
-          cartItems: [...state.cartItems, { ...action.payload, quantity: 1 }], // item new to cart
-        };
+        updatedCartItems = [...state.cartItems, { ...action.payload, quantity: 1 }];
       }
-    }
-    case ACTIONS.REMOVE_FROM_CART: {
+
       return {
-        ...state,
-        cartItems: state.cartItems.filter(
-          (item) => item.id !== action.payload.id
-        ),
+        cartItems: updatedCartItems,
+        totalPrice: state.totalPrice + action.payload.price,
+        totalItems: state.totalItems + 1,
       };
     }
+
+    case ACTIONS.REMOVE_FROM_CART: {
+      const existingItem = state.cartItems.find(item => item.id === action.payload.id);
+      if (!existingItem) return state;
+      let updatedCartItems = [];
+
+      if (existingItem.quantity === 1) {
+        updatedCartItems = state.cartItems.filter(item => item.id !== action.payload.id);
+      } else {
+        updatedCartItems = state.cartItems.map(item =>
+          item.id === action.payload.id
+            ? { ...item, quantity: item.quantity - 1 }
+            : item
+        );
+      }
+
+      return {
+        cartItems: updatedCartItems,
+        totalPrice: state.totalPrice - existingItem.price,
+        totalItems: state.totalItems - 1,
+      };
+    }
+
     case ACTIONS.CLEAR_CART: {
       return {
-        ...state,
         cartItems: [],
+        totalPrice: 0,
+        totalItems: 0,
       };
     }
-    default: {
+
+    default:
       return state;
-    }
   }
 };
