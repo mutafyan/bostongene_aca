@@ -1,8 +1,9 @@
 import { useCart } from "../context/CartContext";
 import { ACTIONS } from "../context/cartReducer";
 import "../styles/ProductCard.css";
+import ProductControls from "./ProductControls";
 
-const ProductCard = ({ product, isCart }) => {
+const ProductCard = ({ product }) => {
   const { title, image, price, rating } = product;
   const { cart, dispatch } = useCart();
 
@@ -11,7 +12,6 @@ const ProductCard = ({ product, isCart }) => {
 
   const handleAddToCart = () => {
     dispatch({ type: ACTIONS.ADD_TO_CART, payload: product });
-    console.log(quantity);
   };
 
   const handleRemoveFromCart = () => {
@@ -28,17 +28,11 @@ const ProductCard = ({ product, isCart }) => {
         ⭐<strong>{rating.rate}</strong> ({rating.count} ratings)
       </p>
 
-      {quantity === 0 ? (
-        <button onClick={handleAddToCart}>➕ Add to cart</button>
-      ) : quantity === 1 && isCart ? (
-        <button onClick={handleRemoveFromCart}>🗑️ Remove from cart</button>
-      ) : (
-        <div className="quantity-controls">
-          <button onClick={handleRemoveFromCart}>➖</button>
-          <span>{quantity}</span>
-          <button onClick={handleAddToCart}>➕</button>
-        </div>
-      )}
+      <ProductControls
+        quantity={quantity}
+        onAddToCart={handleAddToCart}
+        onRemoveFromCart={handleRemoveFromCart}
+      />
     </div>
   );
 };

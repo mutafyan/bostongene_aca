@@ -2,29 +2,36 @@ export const initialState = {
   cartItems: [],
   totalPrice: 0,
   totalItems: 0,
+  isOpen: false,
 };
 
 export const ACTIONS = Object.freeze({
   ADD_TO_CART: "ADD_TO_CART",
   REMOVE_FROM_CART: "REMOVE_FROM_CART",
   CLEAR_CART: "CLEAR_CART",
+  TOGGLE_OPEN_CART: "TOGGLE_OPEN_CART",
 });
 
 export const cartReducer = (state, action) => {
   switch (action.type) {
     case ACTIONS.ADD_TO_CART: {
-      const existingItem = state.cartItems.find(item => item.id === action.payload.id);
-      
+      const existingItem = state.cartItems.find(
+        (item) => item.id === action.payload.id
+      );
+
       let updatedCartItems = [];
 
       if (existingItem) {
-        updatedCartItems = state.cartItems.map(item =>
+        updatedCartItems = state.cartItems.map((item) =>
           item.id === action.payload.id
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
       } else {
-        updatedCartItems = [...state.cartItems, { ...action.payload, quantity: 1 }];
+        updatedCartItems = [
+          ...state.cartItems,
+          { ...action.payload, quantity: 1 },
+        ];
       }
 
       return {
@@ -35,14 +42,18 @@ export const cartReducer = (state, action) => {
     }
 
     case ACTIONS.REMOVE_FROM_CART: {
-      const existingItem = state.cartItems.find(item => item.id === action.payload.id);
+      const existingItem = state.cartItems.find(
+        (item) => item.id === action.payload.id
+      );
       if (!existingItem) return state;
       let updatedCartItems = [];
 
       if (existingItem.quantity === 1) {
-        updatedCartItems = state.cartItems.filter(item => item.id !== action.payload.id);
+        updatedCartItems = state.cartItems.filter(
+          (item) => item.id !== action.payload.id
+        );
       } else {
-        updatedCartItems = state.cartItems.map(item =>
+        updatedCartItems = state.cartItems.map((item) =>
           item.id === action.payload.id
             ? { ...item, quantity: item.quantity - 1 }
             : item
@@ -62,6 +73,13 @@ export const cartReducer = (state, action) => {
         totalPrice: 0,
         totalItems: 0,
       };
+    }
+
+    case ACTIONS.TOGGLE_OPEN_CART: {
+      return {
+        ...state,
+        isOpen: !state.isOpen,
+      }
     }
 
     default:
