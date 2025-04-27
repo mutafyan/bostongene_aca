@@ -1,6 +1,7 @@
 import { useState } from "react";
 import TaskBoard from "./components/TaskBoard";
 import NewTaskButton from "./components/NewTaskButton";
+import TaskModal from "./components/TaskModal";
 
 function App() {
   const [tasks, setTasks] = useState([]);
@@ -36,7 +37,12 @@ function App() {
       <NewTaskButton onAdd={addTask} />
       <TaskBoard tasks={tasks} setTasks={setTasks} onEdit={setModalTask} />
       {modalTask && (
-        <div>modal</div> // must be modal
+        <TaskModal
+          task={modalTask}
+          onSave={saveTask}
+          onDelete={deleteTask}
+          onClose={() => setModalTask(null)}
+        />
       )}
     </div>
   );
