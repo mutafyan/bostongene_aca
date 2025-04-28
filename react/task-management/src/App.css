@@ -1,11 +1,7 @@
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
   background: #f4f5f7;
 }
 .app-container {
   padding: 1rem;
-}
-h1 {
-  text-align: center;
 }

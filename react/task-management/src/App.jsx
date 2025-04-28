@@ -1,13 +1,15 @@
 import { useState } from "react";
+import { Row, Typography } from "antd";
 import TaskBoard from "./components/TaskBoard";
 import NewTaskButton from "./components/NewTaskButton";
 import TaskModal from "./components/TaskModal";
+
+const { Title } = Typography;
 
 function App() {
   const [tasks, setTasks] = useState([]);
   const [modalTask, setModalTask] = useState(null);
 
-  // creating a new task with default values
   const addTask = () => {
     const newTask = {
       id: Date.now(),
@@ -26,6 +28,7 @@ function App() {
     setTasks((prev) => prev.map((t) => (t.id === updated.id ? updated : t)));
     setModalTask(null);
   };
+
   const deleteTask = (id) => {
     setTasks((prev) => prev.filter((t) => t.id !== id));
     setModalTask(null);
@@ -33,8 +36,12 @@ function App() {
 
   return (
     <div className="app-container">
-      <h1>Task Manager</h1>
-      <NewTaskButton onAdd={addTask} />
+      <Title level={2} style={{ textAlign: "center" }}>
+        Task Manager
+      </Title>
+      <Row justify="center" style={{ marginBottom: 16 }}>
+        <NewTaskButton onAdd={addTask} />
+      </Row>
       <TaskBoard tasks={tasks} setTasks={setTasks} onEdit={setModalTask} />
       {modalTask && (
         <TaskModal

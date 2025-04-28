@@ -1,22 +1,30 @@
+import { Card, Tag, Avatar } from 'antd';
+
+const priorityColor = { low: 'blue', medium: 'green', high: 'red' };
 
 const TaskCard = ({ task, onEdit }) => {
   const dragStart = e => e.dataTransfer.setData('taskId', task.id);
   return (
-    <div
-      className="task-card"
+    <Card
+      size="small"
+      style={{ marginBottom: 8, cursor: 'pointer' }}
       draggable
       onDragStart={dragStart}
       onClick={() => onEdit(task)}
-      style={{
-        background: '#fff', padding: '0.5rem', margin: '0.5rem 0',
-        borderRadius: '4px', cursor: 'pointer', boxShadow: '0 1px 2px rgba(0,0,0,0.2)'
-      }}
     >
-      <strong>{task.title}</strong>
-      <div>Priority: {task.priority}</div>
-      <div>Due: {task.dueDate}</div>
-      <div>Assignee: {task.assignee}</div>
-    </div>
+      <Card.Meta
+        avatar={<Avatar>{task.assignee ? task.assignee.charAt(0).toUpperCase() : '?'}</Avatar>}
+        title={task.title}
+        description={
+          <>  
+            <Tag color={priorityColor[task.priority]}>
+              {task.priority.charAt(0).toUpperCase() + task.priority.slice(1)}
+            </Tag>
+            <div>Due: {task.dueDate}</div>
+          </>
+        }
+      />
+    </Card>
   );
 }
 
