@@ -3,7 +3,7 @@ import { Row, Typography } from "antd";
 import TaskBoard from "./components/TaskBoard";
 import NewTaskButton from "./components/NewTaskButton";
 import TaskModal from "./components/TaskModal";
-
+import { v4 } from "uuid";
 const { Title } = Typography;
 
 function App() {
@@ -12,13 +12,13 @@ function App() {
 
   const addTask = () => {
     const newTask = {
-      id: Date.now(),
+      id: v4(),
       title: "New Task",
       description: "",
       status: "todo",
       priority: "medium",
       dueDate: new Date().toISOString().slice(0, 10),
-      assignee: "",
+      assignees: [],
     };
     setTasks((prev) => [...prev, newTask]);
     setModalTask(newTask);
@@ -36,12 +36,21 @@ function App() {
 
   return (
     <div className="app-container">
-      <Title level={2} style={{ textAlign: "center" }}>
-        Task Manager
-      </Title>
-      <Row justify="center" style={{ marginBottom: 16 }}>
-        <NewTaskButton onAdd={addTask} />
-      </Row>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Title level={2} style={{ margin: "20px" }}>
+          Task Manager
+        </Title>
+        <Row justify="center" style={{ alignSelf: "center" }}>
+          <NewTaskButton onAdd={addTask} />
+        </Row>
+      </div>
       <TaskBoard tasks={tasks} setTasks={setTasks} onEdit={setModalTask} />
       {modalTask && (
         <TaskModal

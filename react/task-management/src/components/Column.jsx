@@ -10,7 +10,7 @@ const Column = ({ status, tasks, onDrop, allowDrop, onEdit }) => {
       style={{ background: "#ebecf0", minHeight: "400px" }}
       styles={{ body: { padding: "8px" } }}
       onDragOver={allowDrop}
-      onDrop={(e) => onDrop(e, status.key)}
+      onDrop={(e) => onDrop(e, status.value)}
     >
       {tasks.map((task) => (
         <TaskCard key={task.id} task={task} onEdit={onEdit} />

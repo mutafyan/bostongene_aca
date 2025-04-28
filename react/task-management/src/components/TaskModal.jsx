@@ -2,18 +2,7 @@ import { useEffect } from "react";
 import { Modal, Form, Input, Select, DatePicker, Button } from "antd";
 import { DeleteOutlined, SaveOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
-
-const statuses = [
-  { label: "To do", value: "todo" },
-  { label: "Doing", value: "doing" },
-  { label: "Blocked", value: "blocked" },
-  { label: "Done", value: "done" },
-];
-const priorities = [
-  { label: "Low", value: "low" },
-  { label: "Medium", value: "medium" },
-  { label: "High", value: "high" },
-];
+import { statuses, priorities, mockUsers as users } from "../constants";
 
 const TaskModal = ({ task, onSave, onDelete, onClose }) => {
   const [form] = Form.useForm();
@@ -79,8 +68,27 @@ const TaskModal = ({ task, onSave, onDelete, onClose }) => {
         <Form.Item name="dueDate" label="Due Date">
           <DatePicker />
         </Form.Item>
-        <Form.Item name="assignee" label="Assignee">
-          <Input />
+        <Form.Item name="assignees" label="Assignees">
+          <Select
+            mode="multiple"
+            placeholder="Select users"
+            options={users.map((user) => ({
+              value: user.id,
+              label: (
+                <div
+                  style={{ display: "flex", alignItems: "center", gap: "8px" }}
+                >
+                  <img
+                    src={user.avatar}
+                    alt={user.name}
+                    style={{ width: 24, height: 24, borderRadius: "50%" }}
+                  />
+                  {user.name}
+                </div>
+              ),
+            }))}
+            optionLabelProp="label"
+          />
         </Form.Item>
       </Form>
     </Modal>
