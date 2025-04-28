@@ -5,6 +5,12 @@ export const statuses = [
   { label: "Done", value: "done" },
 ];
 
+export const statusColors = {
+    'todo': 'blue',
+    'doing': 'purple',
+    'blocked':'red',
+    'done': 'green'
+}
 export const priorities = [
   { label: "Low", value: "low" },
   { label: "Medium", value: "medium" },
